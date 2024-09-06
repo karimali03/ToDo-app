@@ -1,0 +1,27 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karimali03/ToDo-app.git"
+  },
+  "author": "Karim Ali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karimali03/ToDo-app/issues"
+  },
+  "homepage": "https://github.com/karimali03/ToDo-app#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.6.1",
+    "nodemon": "^3.1.4",
+    "uuid": "^10.0.0"
+  }
+}

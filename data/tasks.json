@@ -9,7 +9,7 @@
   },
   {
     "id": 2,
-    "title": "Task 2",
+    "title": "update task",
     "description": "Description 2",
     "dueDate": "2021-01-02",
     "priority": "medium",
@@ -21,6 +21,6 @@
     "description": "Description 3",
     "dueDate": "2021-01-03",
     "priority": "low",
-    "isCompleted": false
+    "isCompleted": true
   }
 ]

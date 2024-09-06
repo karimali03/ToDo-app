@@ -34,8 +34,7 @@ class TaskModel {
         let tasks = this.readData();
         let taskIndex = tasks.findIndex(task => task.id === id);
         if(taskIndex === -1) return false;
-        tasks[taskIndex].title = updates.title;
-        tasks[taskIndex].description = updates.description;
+        tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
         this.writeData(tasks);
         return true;
     }

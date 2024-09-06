@@ -1,32 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/tasksController');
+const validationTask = require('../middlewares/validation');
 
 // param middlware
-router.param('id',(req,res,next,id) => {
-    console.log("id",id);
-    let ID = +id;
-    if(isNaN(ID)){
-        res.status(400).send("Invalid Id");
-        return;
-    }
-    req.id = ID;
-    next();
- }); 
+router.param('id', validationTask.validationId); 
  
 
 
 // Get all tasks
 router.get('/', todoController.getAllTasks);
 
-// Create a new task
-router.post('/', todoController.createTask);
+// Create a new task;
+router.post('/', validationTask.validationCreate, todoController.createTask);
 
 // Get a task
 router.get('/:id', todoController.getTaskById);
 
 // Update a task
-router.put('/:id', todoController.updateTask);
+router.put('/:id', validationTask.validationUpdate , todoController.updateTask);
 
 // Toggle a task
 router.patch('/:id', todoController.toggleTask);

@@ -1,5 +1,5 @@
-const validCreate = require('../util/validCreate');
-const validUpdate = require('../util/validUpdate');
+const validCreate = require('../util/valid.create');
+const validUpdate = require('../util/valid.update');
 
 class valadationTask{
     

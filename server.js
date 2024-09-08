@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const tasksRoutes = require('./routes/tasksRoutes'); // Import routes
+const tasksRoutes = require('./routes/tasks.routes'); // Import routes
 const logging = require('./middlewares/logging');
 const { default: helmet } = require('helmet');
 

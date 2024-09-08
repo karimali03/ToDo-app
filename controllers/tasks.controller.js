@@ -1,4 +1,4 @@
-const TodoModel = require('../models/tasksModel');
+const TodoModel = require('../models/tasks.model');
 
 
 const getAllTasks = (req, res) => {

@@ -1,62 +1,61 @@
-const fs = require('fs');
-const path = require('path');
-const dataPath = path.join(__dirname, '../data/tasks.json');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-
-class TaskModel {
-    static readData() {
-        const data = fs.readFileSync(dataPath, 'utf8');
-        return JSON.parse(data);
+const taskSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        minlength: [1, 'Description must be at least 1 character']
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false
+    },
+    dueDate: {
+        type: Date
+    },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'low'
     }
+});
 
-    static writeData(tasks) {
-        fs.writeFileSync(dataPath, JSON.stringify(tasks, null, 2), 'utf8');
-    }
-    
-    static getTaskById(id) {
-        const tasks = this.readData();
-        return tasks.find(task => task.id === id);
-    }
+// statics functions ( model level functions )
 
-    static createTask(task) {
-        const tasks = this.readData();
-        const newTask = { id: tasks.length + 1 , 
-            title :task.title ,
-             description : task.description,
-              isCompleted: false };
-    
-        tasks.push(newTask);
-        this.writeData(tasks);
-        return newTask;
-    }
+taskSchema.statics.createTask = async function(task){
+    return await this.create(task);
+}
 
-    static updateTask(id, updates) {
-        let tasks = this.readData();
-        let taskIndex = tasks.findIndex(task => task.id === id);
-        if(taskIndex === -1) return false;
-        tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
-        this.writeData(tasks);
-        return true;
-    }
+taskSchema.statics.getAllTasks = async function(){
+    return await this.find({}, {__v: 0});
+}
 
-    static toggleTask(id) {
-        let tasks = this.readData();
-        let taskIndex = tasks.findIndex(task => task.id === id);
-        if(taskIndex === -1) return false;
-        tasks[taskIndex].isCompleted = !tasks[taskIndex].isCompleted;
-        this.writeData(tasks);
-        return true;
-    }
-
-    static deleteTask(id) {
-        let tasks = this.readData();
-        tasks = tasks.filter(task => task.id !== id);
-        this.writeData(tasks);
-        return id;
-    }
-
-
+taskSchema.statics.getTaskById = async function(id){
+    return await this.findById(id);
 }
 
 
-module.exports = TaskModel;
+taskSchema.statics.updateTaskById = async function(id, update){
+       return await this.findByIdAndUpdate(id , update , 
+        { new : true,runValidators : true });
+}
+
+taskSchema.statics.deleteTaskById = async function(id){
+    return await this.findByIdAndDelete(id);
+}
+
+taskSchema.statics.toggleTask = async function(id){
+    const task = await this.findById(id);
+    if(!task) return false;
+    task.isCompleted = !task.isCompleted;
+    await task.save();
+    return true;
+}
+
+
+const Task = mongoose.model('Task', taskSchema);
+module.exports = Task;

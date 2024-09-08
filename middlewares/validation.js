@@ -4,13 +4,14 @@ const validUpdate = require('../util/valid.update');
 class valadationTask{
     
     static validationId = (req,res,next,id) => {
-        let ID = +id;
-        if(isNaN(ID) || ID < 0){
-            res.status(400).send("Invalid Id");
-            return;
+        const validID = /^[0-9a-fA-F]{24}$/;
+        if(validID.test(id)){
+            req.id = id;
+            next();
         }
-        req.id = ID;
-        next();
+        else res.status(400).send({
+            message: "Invalid Id"
+        });
     }
     
     static validationCreate = (req,res,next) => {

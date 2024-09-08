@@ -1,45 +1,80 @@
 const TodoModel = require('../models/tasks.model');
 
 
-const getAllTasks = (req, res) => {
-    const tasks = TodoModel.readData();
-    res.json(tasks);
-};
+class TaskController  {
+    static getAllTasks = async (req, res) => {
+        try {
+            const tasks = await TodoModel.getAllTasks();
+            res.send(tasks);
+        }
+        catch(err){
+            res.status(400).send(err);   
+        }
+
+    };
+
+    static createTask = async (req, res) => {
+        try {
+        const newtask = await TodoModel.createTask(req.body);
+        res.send({ message: "task is created", result: newtask });
+        }
+        catch(err){
+            res.status(400).send(err);
+        }
+
+    };
 
 
-const getTaskById = (req, res) => {
-    const task = TodoModel.getTaskById(req.id);
-    console.log("task",req.id);
-    res.json(task);
+
+    static getTaskById = async (req, res) => {
+        try {
+            const task = await TodoModel.getTaskById(req.id);
+            if(task) res.send({ message: "task found", result : task });
+            else res.send({ message: "task not found", result : null })
+        }
+        catch(err){
+            res.status(400).send(err);
+        }
+    };
+
+
+    static updateTask =  async (req, res) => {
+        try { 
+        const updatedTask = await TodoModel.updateTaskById( req.id, req.body );
+        res.send({
+                message: "task is updated",
+                result: updatedTask
+        });
+        }
+        catch(err){
+        res.status(400).send(err);
+        }
+    }
+
+    static toggleTask = async (req, res) => {
+        try { 
+            const isCompleted =  await TodoModel.toggleTask(req.id);
+            if(!isCompleted) res.status(400).send({ message: "task not found"});
+            else res.send({ message: "task is toggled"});
+        }
+        catch(err){
+            res.status(400).send(err);
+        }
+    };
+
+    static deleteTask = async (req, res) => {
+        try { 
+            const deletedTask = await TodoModel.deleteTaskById(req.id);
+            if(deletedTask == null) 
+                res.send({ message: "task not found", result: null});
+            else res.send({ message: "task is deleted", result: deletedTask });
+        }
+        catch(err){
+            res.status(400).send(err);
+        }
 };
 
-const createTask = (req, res) => {
-    const newtask = TodoModel.createTask(req.body);
-    res.send("added new task");
-};
+}
 
-const updateTask = (req, res) => {
-     const updatedTask = TodoModel.updateTask( req.id, req.body );
-     if(updateTask) res.send("done");
-     else res.send("task not found");
-};
 
-const toggleTask = (req, res) => { 
-    const isCompleted = TodoModel.toggleTask(req.id);
-    if(!isCompleted) res.send("task not found");
-    else res.send('done');
-};
-
-const deleteTask = (req, res) => {
-    const deletedTask = TodoModel.deleteTask(req.id);
-    res.send(`task with id ${req.id} is deleted`);
-};
-
-module.exports = {
-    getAllTasks,
-    createTask,
-    updateTask,
-    toggleTask,
-    deleteTask,
-    getTaskById
-};
+module.exports = TaskController;

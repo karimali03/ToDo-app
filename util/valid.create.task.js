@@ -21,5 +21,5 @@ const schema =  {
         "additionalProperties" : false,
 };
 
-const CreateValid = ajv.compile(schema);
-module.exports = CreateValid;
+const CreateTaskValid = ajv.compile(schema);
+module.exports = CreateTaskValid;

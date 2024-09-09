@@ -1,5 +1,5 @@
-const validCreate = require('../util/valid.create');
-const validUpdate = require('../util/valid.update');
+const CreateTaskValid = require('../util/valid.create.task');
+const validUpdateTask = require('../util/valid.update.task');
 
 class valadationTask{
     
@@ -15,18 +15,18 @@ class valadationTask{
     }
     
     static validationCreate = (req,res,next) => {
-        const isValid = validCreate(req.body);
+        const isValid = CreateTaskValid(req.body);
         if(!isValid){
-            res.status(400).send(validCreate.errors);
+            res.status(400).send(CreateTaskValid.errors);
             return;
         }
         next();
     }
     
     static validationUpdate = (req,res,next) => {
-        const isValid = validUpdate(req.body);
+        const isValid = validUpdateTask(req.body);
         if(!isValid){
-            res.status(400).send(validUpdate.errors);
+            res.status(400).send(validUpdateTask.errors);
             return;
         }
         next();

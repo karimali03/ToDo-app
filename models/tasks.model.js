@@ -21,41 +21,73 @@ const taskSchema = new Schema({
         type: String,
         enum: ['low', 'medium', 'high'],
         default: 'low'
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true, // A task must be linked to a user
     }
 });
 
 // statics functions ( model level functions )
+  taskSchema.statics = {
+    async createTask(taskData) {
+      try {
+        return await this.create(taskData);
+      } catch (error) {
+        throw new Error('Error creating task');
+      }
+    },
+  
+    async getTasksByUserId(userId) {
+      try {
+        return await this.find({ userId });
+      } catch (error) {
+        throw new Error('Error fetching tasks for user');
+      }
+    },
+  
+    async getTaskById(taskId) {
+      try {
+        return await this.findById(taskId);
+      } catch (error) {
+        throw new Error('Error fetching task by ID');
+      }
+    },
+  
+    async updateTaskById(taskId, updateData) {
+      try {
+        return await this.findByIdAndUpdate(taskId, updateData, {
+          new: true,
+          runValidators: true,
+        });
+      } catch (error) {
+        throw new Error('Error updating task by ID');
+      }
+    },
+  
+    async deleteTaskById(taskId) {
+      try {
+        return await this.findByIdAndDelete(taskId);
+      } catch (error) {
+        throw new Error('Error deleting task by ID');
+      }
+    },
+  
+    async toggleTaskCompletion(taskId) {
+      try {
+        const task = await this.findById(taskId);
+        if (!task) throw new Error('Task not found');
+        task.isCompleted = !task.isCompleted;
+        await task.save();
+        return task;
+      } catch (error) {
+        throw new Error('Error toggling task completion');
+      }
+    },
+  };
 
-taskSchema.statics.createTask = async function(task){
-    return await this.create(task);
-}
-
-taskSchema.statics.getAllTasks = async function(){
-    return await this.find({}, {__v: 0});
-}
-
-taskSchema.statics.getTaskById = async function(id){
-    return await this.findById(id);
-}
 
 
-taskSchema.statics.updateTaskById = async function(id, update){
-       return await this.findByIdAndUpdate(id , update , 
-        { new : true,runValidators : true });
-}
-
-taskSchema.statics.deleteTaskById = async function(id){
-    return await this.findByIdAndDelete(id);
-}
-
-taskSchema.statics.toggleTask = async function(id){
-    const task = await this.findById(id);
-    if(!task) return false;
-    task.isCompleted = !task.isCompleted;
-    await task.save();
-    return true;
-}
-
-
-const Task = mongoose.model('Task', taskSchema);
-module.exports = Task;
+const tasksModel = mongoose.model('Task', taskSchema);
+module.exports = tasksModel;

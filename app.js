@@ -1,9 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const tasksRoutes = require('./routes/tasks.routes'); // Import routes
-const logging = require('./middlewares/logging');
 const { default: helmet } = require('helmet');
 const mongoose = require('mongoose');
+
+// Import routes
+const tasksRoutes = require('./routes/tasks.routes');
+const loginRoutes = require('./routes/login.routes');
+const signupRoutes = require('./routes/signup.routes');
+
 
 const app = express();
 const port =  process.env.PORT ||  3000;
@@ -15,12 +19,13 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 
 
 // Custom middleware
-app.use(logging); // Log requests
+
 
 
 // Use routes
-app.use('/api', tasksRoutes);
-
+app.use('/api/signup' ,signupRoutes);
+app.use('/api/tasks', tasksRoutes);
+app.use('/api/login' ,loginRoutes);
 
 
 

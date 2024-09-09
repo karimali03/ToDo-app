@@ -1,5 +1,4 @@
-const TodoModel = require('../models/tasks.model');
-
+const tasksModel = require('../models/tasks.model');
 
 class TaskController  {
     static getAllTasks = async (req, res) => {
@@ -10,7 +9,6 @@ class TaskController  {
         catch(err){
             res.status(400).send(err);   
         }
-
     };
 
     static createTask = async (req, res) => {

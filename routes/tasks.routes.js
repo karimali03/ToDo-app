@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/tasks.controller');
-const validationTask = require('../middlewares/validation');
+const validationTask = require('../middlewares/validation.tasks');
 
 // param middlware
 router.param('id', validationTask.validationId); 

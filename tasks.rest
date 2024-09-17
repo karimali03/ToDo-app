@@ -1,0 +1,44 @@
+// signup
+POST http://localhost:4000/api/signup
+Content-Type: application/json
+
+{
+    "username": "ahmed hamdy",
+    "email": "ahmed@gmail.com",
+    "password": "123456"
+}
+### login
+POST http://localhost:4000/api/login
+Content-Type: application/json
+
+{
+    "email": "ahmed@gmail.com",
+    "password": "123456"
+}
+### create task
+POST http://localhost:4000/api/tasks
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpYXQiOjE3MjY1NzY2OTgsImV4cCI6MTcyNjU3Njc4NH0.QSeiG4LtqFx0VyW_etaL6X1gJk616mesZHciTEy9Orc
+
+{
+    "title": "task 2",
+    "description": "task 2 description"
+}
+### get all tasks
+GET http://localhost:4000/api/tasks
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpYXQiOjE3MjY1NzY2OTgsImV4cCI6MTcyNjU3Njc4NH0.QSeiG4LtqFx0VyW_etaL6X1gJk616mesZHciTEy9Orc
+### get task by id
+GET http://localhost:4000/api/tasks/66e9766268c262daa5e26871
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpYXQiOjE3MjY1NzY5NDcsImV4cCI6MTcyNjU3NzAzM30.46Z-VrgNCzeayWwGyVMEc82GElZMnIOCciDq0_URHYY
+### update task by id
+PUT http://localhost:4000/api/tasks/66e9766268c262daa5e26871
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpYXQiOjE3MjY1NzY5NDcsImV4cCI6MTcyNjU3NzAzM30.46Z-VrgNCzeayWwGyVMEc82GElZMnIOCciDq0_URHYY
+
+{
+    "title": "task 2 updated",
+    "description": "task 2 description updated"
+}
+### delete task by id
+DELETE http://localhost:4000/api/tasks/66e9766268c262daa5e26871
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpYXQiOjE3MjY1NzY5NDcsImV4cCI6MTcyNjU3NzAzM30.46Z-VrgNCzeayWwGyVMEc82GElZMnIOCciDq0_URHYY

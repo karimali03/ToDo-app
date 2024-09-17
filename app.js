@@ -1,3 +1,4 @@
+require('dotenv').config({path: './config/config.env'});
 const express = require('express');
 const bodyParser = require('body-parser');
 const { default: helmet } = require('helmet');
@@ -7,7 +8,7 @@ const mongoose = require('mongoose');
 const tasksRoutes = require('./routes/tasks.routes');
 const loginRoutes = require('./routes/login.routes');
 const signupRoutes = require('./routes/signup.routes');
-
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 const port =  process.env.PORT ||  3000;
@@ -26,7 +27,7 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 app.use('/api/signup' ,signupRoutes);
 app.use('/api/tasks', tasksRoutes);
 app.use('/api/login' ,loginRoutes);
-
+app.use('/api/user', userRoutes);
 
 
 connect().catch(err => console.log(err));

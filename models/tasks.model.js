@@ -33,6 +33,7 @@ const taskSchema = new Schema({
   taskSchema.statics = {
     async createTask(taskData) {
       try {
+        console.log(taskData);
         return await this.create(taskData);
       } catch (error) {
         throw new Error('Error creating task');
@@ -41,42 +42,41 @@ const taskSchema = new Schema({
   
     async getTasksByUserId(userId) {
       try {
-        return await this.find({ userId });
+        return await this.find({ userId : userId });
       } catch (error) {
         throw new Error('Error fetching tasks for user');
       }
     },
   
-    async getTaskById(taskId) {
+    async getTaskById( userId , taskId ) {
       try {
-        return await this.findById(taskId);
+        return await this.find({ userId : userId , _id : taskId });
       } catch (error) {
         throw new Error('Error fetching task by ID');
       }
     },
   
-    async updateTaskById(taskId, updateData) {
+    async updateTaskById( userId , taskId, updateData) {
       try {
-        return await this.findByIdAndUpdate(taskId, updateData, {
-          new: true,
-          runValidators: true,
+        return await this.findOneAndUpdate({ userId : userId , _id : taskId }, updateData, {
+          new : true
         });
       } catch (error) {
         throw new Error('Error updating task by ID');
       }
     },
   
-    async deleteTaskById(taskId) {
+    async deleteTaskById( userId , taskId) {
       try {
-        return await this.findByIdAndDelete(taskId);
+        return await this.deleteOne({ userId : userId , _id : taskId });
       } catch (error) {
         throw new Error('Error deleting task by ID');
       }
     },
   
-    async toggleTaskCompletion(taskId) {
+    async toggleTaskCompletion( userId , taskId) {
       try {
-        const task = await this.findById(taskId);
+        const task = await this.find({ userId : userId , _id : taskId });
         if (!task) throw new Error('Task not found');
         task.isCompleted = !task.isCompleted;
         await task.save();

@@ -1,0 +1,36 @@
+POST http://localhost:4000/api/signup 
+Content-Type: application/json
+
+{
+    "username": "Karim Ali",
+    "email": "Karim@gamil.com",
+    "password":"123456"
+}
+###
+POST http://localhost:4000/api/login
+Content-Type: application/json
+
+{
+    "email": "Karim@gamil.com",
+    "password":"123456"
+}
+###
+GET http://localhost:4000/api/user
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5OTQ0OGUzMGYwZjc4ZmE4NzVkYmQiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MjY2MDAxMDIsImV4cCI6MTcyNjYwMDcwMn0.hBJ3NAYBNBDK33sLneEkYVhaAfmL00L_Q1VMZNGCXBQ
+###
+POST http://localhost:4000/api/login
+Content-Type: application/json
+
+{
+    "email": "google@google.com",
+    "password":"123__123"
+}
+###
+PUT http://localhost:4000/api/user/66e96a0dd13b464b923ccb38
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmU5NmEwZGQxM2I0NjRiOTIzY2NiMzgiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzI2NjAwNjQ3LCJleHAiOjE3MjY2MDEyNDd9.RWCzpTmloEyJCAzG-OaJ-uzA-AaB_QkgAtt0SLifwr0
+
+{
+    "email": "google@google.com",
+    "password": "123__123"
+}

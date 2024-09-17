@@ -1,6 +1,6 @@
 const validSignup = require('../util/valid.signup');
 const validLogin = require('../util/valid.login');
-
+const updateUserValid = require('../util/valid.update.user');
 class validationUser{
 
     static validationSignup = (req,res,next) => {
@@ -20,6 +20,17 @@ class validationUser{
         }
         next();
     }
+
+    static validationUpdateUser = (req,res,next) => {
+        const isValid = updateUserValid(req.body);
+        if(!isValid){
+            res.status(400).send(updateUserValid.errors);
+            return;
+        }
+        next();
+    }
+
+
     
 }
 

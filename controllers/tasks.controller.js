@@ -3,7 +3,7 @@ const tasksModel = require('../models/tasks.model');
 class TaskController  {
     static getAllTasks = async (req, res) => {
         try {
-            const tasks = await TodoModel.getAllTasks();
+            const tasks = await tasksModel.getTasksByUserId(req.userId);
             res.send(tasks);
         }
         catch(err){
@@ -13,7 +13,8 @@ class TaskController  {
 
     static createTask = async (req, res) => {
         try {
-        const newtask = await TodoModel.createTask(req.body);
+        req.body.userId = req.userId;
+        const newtask = await tasksModel.createTask(req.body);
         res.send({ message: "task is created", result: newtask });
         }
         catch(err){
@@ -26,7 +27,7 @@ class TaskController  {
 
     static getTaskById = async (req, res) => {
         try {
-            const task = await TodoModel.getTaskById(req.id);
+            const task = await tasksModel.getTaskById(req.userId , req.id);
             if(task) res.send({ message: "task found", result : task });
             else res.send({ message: "task not found", result : null })
         }
@@ -38,7 +39,7 @@ class TaskController  {
 
     static updateTask =  async (req, res) => {
         try { 
-        const updatedTask = await TodoModel.updateTaskById( req.id, req.body );
+        const updatedTask = await tasksModel.updateTaskById(req.userId , req.id, req.body );
         res.send({
                 message: "task is updated",
                 result: updatedTask
@@ -51,7 +52,7 @@ class TaskController  {
 
     static toggleTask = async (req, res) => {
         try { 
-            const isCompleted =  await TodoModel.toggleTask(req.id);
+            const isCompleted =  await tasksModel.toggleTask(req.userId , req.id);
             if(!isCompleted) res.status(400).send({ message: "task not found"});
             else res.send({ message: "task is toggled"});
         }
@@ -62,7 +63,7 @@ class TaskController  {
 
     static deleteTask = async (req, res) => {
         try { 
-            const deletedTask = await TodoModel.deleteTaskById(req.id);
+            const deletedTask = await tasksModel.deleteTaskById(req.userId , req.id);
             if(deletedTask == null) 
                 res.send({ message: "task not found", result: null});
             else res.send({ message: "task is deleted", result: deletedTask });

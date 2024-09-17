@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bycrypt = require('bcrypt');
 const { Schema } = mongoose;
-
+const jwt = require('jsonwebtoken');
 
 const userSchema = new Schema({
     username: {
@@ -35,7 +35,7 @@ userSchema.statics = {
   
     async getAllUsers() {
       try {
-        return await this.find({});
+        return await this.find({} , {__v: 0 , password: 0});
       } catch (error) {
         throw new Error('Error fetching users');
       }
@@ -77,7 +77,7 @@ userSchema.statics = {
   };
   
 
-userSchema.methods = {
+  userSchema.methods = {
     async comparePassword(password) { 
       try {
         const isMatch = await bycrypt.compare( password , this.password );
@@ -86,7 +86,13 @@ userSchema.methods = {
       catch(err){
         return Error("Error in compare password"); 
       }
-    }
+    },
+
+      generateAuthToken() {
+        const token = jwt.sign({ _id: this._id , isAdmin : this.isAdmin }, process.env.JWT_SECRET,
+          { expiresIn: process.env.JWT_EXPIRES_IN });
+        return token;
+      }
 
   };
 

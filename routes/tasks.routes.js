@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/tasks.controller');
 const validationTask = require('../middlewares/validation.tasks');
+const auth = require('../middlewares/auth');
 
 // param middlware
 router.param('id', validationTask.validationId); 
@@ -9,22 +10,22 @@ router.param('id', validationTask.validationId);
 
 
 // Get all tasks
-router.get('/', todoController.getAllTasks);
+router.get('/', auth.loginAuth , todoController.getAllTasks);
 
 // Create a new task;
-router.post('/', validationTask.validationCreate, todoController.createTask);
+router.post('/', validationTask.validationCreate, auth.loginAuth , todoController.createTask);
 
 // Get a task
-router.get('/:id', todoController.getTaskById);
+router.get('/:id' , auth.loginAuth , todoController.getTaskById );
 
 // Update a task
-router.put('/:id', validationTask.validationUpdate , todoController.updateTask);
+router.put('/:id',  validationTask.validationUpdate , auth.loginAuth , todoController.updateTask);
 
 // Toggle a task
-router.patch('/:id', todoController.toggleTask);
+router.patch('/:id', auth.loginAuth ,todoController.toggleTask);
 
 // Delete a task
-router.delete('/:id', todoController.deleteTask);
+router.delete('/:id', auth.loginAuth , todoController.deleteTask);
 
 
 

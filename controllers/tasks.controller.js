@@ -1,77 +1,47 @@
 const tasksModel = require('../models/tasks.model');
+const asyncFun = require('../middlewares/async.function');
 
 class TaskController  {
-    static getAllTasks = async (req, res) => {
-        try {
+    static getAllTasks = asyncFun( async (req, res) => {
             const tasks = await tasksModel.getTasksByUserId(req.userId);
             res.send(tasks);
-        }
-        catch(err){
-            res.status(400).send(err);   
-        }
-    };
+    });
 
-    static createTask = async (req, res) => {
-        try {
+    static createTask = asyncFun( async (req, res) => {
         req.body.userId = req.userId;
         const newtask = await tasksModel.createTask(req.body);
         res.send({ message: "task is created", result: newtask });
-        }
-        catch(err){
-            res.status(400).send(err);
-        }
-
-    };
+    });
 
 
 
-    static getTaskById = async (req, res) => {
-        try {
+    static getTaskById = asyncFun( async (req, res) => {
             const task = await tasksModel.getTaskById(req.userId , req.id);
             if(task) res.send({ message: "task found", result : task });
-            else res.send({ message: "task not found", result : null })
-        }
-        catch(err){
-            res.status(400).send(err);
-        }
-    };
+            else res.send({ message: "task not found", result : null });
+    });
 
 
-    static updateTask =  async (req, res) => {
-        try { 
+    static updateTask = asyncFun( async (req, res) => {
         const updatedTask = await tasksModel.updateTaskById(req.userId , req.id, req.body );
         res.send({
                 message: "task is updated",
                 result: updatedTask
         });
-        }
-        catch(err){
-        res.status(400).send(err);
-        }
-    }
+    });
 
-    static toggleTask = async (req, res) => {
-        try { 
+    static toggleTask = asyncFun ( async (req, res) => {
             const isCompleted =  await tasksModel.toggleTask(req.userId , req.id);
             if(!isCompleted) res.status(400).send({ message: "task not found"});
             else res.send({ message: "task is toggled"});
-        }
-        catch(err){
-            res.status(400).send(err);
-        }
-    };
+    });
 
-    static deleteTask = async (req, res) => {
-        try { 
+    static deleteTask = asyncFun( async (req, res) => {
             const deletedTask = await tasksModel.deleteTaskById(req.userId , req.id);
             if(deletedTask == null) 
                 res.send({ message: "task not found", result: null});
             else res.send({ message: "task is deleted", result: deletedTask });
-        }
-        catch(err){
-            res.status(400).send(err);
-        }
-};
+    });
 
 }
 

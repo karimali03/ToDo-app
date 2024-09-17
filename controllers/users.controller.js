@@ -1,30 +1,20 @@
 const usersModel = require('../models/users.model');
 const hashing = require('../util/hash.password');
+const asyncFun = require('../middlewares/async.function');
 
 class UserController  {
-    static getAllUsers = async (req, res) => {
-        try {
+    static getAllUsers =  asyncFun ( async (req, res) => {
             const users = await usersModel.getAllUsers();
-            res.send(users);
-        }
-        catch(err){
-            res.status(400).send("Error in fetching users");   
-        }
-    };
+            res.send(users); 
+    });
 
-    static getUserById = async (req, res) => {
-        try {
+    static getUserById = asyncFun( async (req, res) => {
             const user = await usersModel.getUserById(req.params.id);
             if(user) res.send({ message: "user found", result : user });
-            else res.send({ message: "user not found", result : null })
-        }
-        catch(err){
-            res.status(400).send("Error in fetching user");
-        }
-    };
+            else res.send({ message: "user not found", result : null }) 
+    });
 
-    static updateUser =  async (req, res) => {
-        try { 
+    static updateUser = asyncFun( async (req, res) => {
             if(req.body.email){
                 const isExist = await usersModel.getUserByemail(req.body.email);
                 if(isExist) return res.status(400).send({ message: "email cannot be used"});
@@ -38,28 +28,17 @@ class UserController  {
                     message: "user is updated",
                     result: updatedUser
             });
-        }
-        catch(err){
-            res.status(400).send("Error in updating user");
-        }
-    };
+    });
 
-    static createUser = async (req, res) => {
-        try {
+    static createUser = asyncFun( async (req, res) => {
             const isExist = await usersModel.getUserByemail(req.body.email);
             if(isExist) return res.status(400).send({ message: "user already exist"});
             req.body.password = await hashing(req.body.password);
             const newUser = await usersModel.createUser(req.body);
             res.send({ message: "user is created", result: newUser });
-        }
-        catch(err){
-            res.status(400).send("Error in creating user");
-        }
+    });
 
-    };
-
-    static loginUser = async (req, res) => {
-        try {
+    static loginUser = asyncFun( async (req, res) => {
             const user = await usersModel.getUserByemail(req.body.email);
             if(!user) return res.status(400).send({ message: "invalid Email or Password"});
             const isMatch = await user.comparePassword(req.body.password);
@@ -67,23 +46,15 @@ class UserController  {
             let token = user.generateAuthToken();
             res.header('x-auth-token', token)
             .send({ message: "login successfully"});
-        }
-        catch(err){
-            res.status(400).send("Error in login..");
-        }
-    };
+    });
 
 
-    static deleteUser = async (req, res) => {
-        try {
+    static deleteUser = asyncFun(async (req, res) => {
             const user = await usersModel.deleteUserById(req.params.id);
             if(user) res.send({ message: "user is deleted", result: user });
             else res.send({ message: "user not found", result: null });
-        }
-        catch(err){
-            res.status(400).send("Error in deleting user");
-        }
-    };
+    });
+
 }
 
 

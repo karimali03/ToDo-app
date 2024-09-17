@@ -9,10 +9,22 @@ const tasksRoutes = require('./routes/tasks.routes');
 const loginRoutes = require('./routes/login.routes');
 const signupRoutes = require('./routes/signup.routes');
 const userRoutes = require('./routes/user.routes');
+const errorHandler = require('./middlewares/error.handler');
 
 const app = express();
 const port =  process.env.PORT ||  3000;
 
+
+// Error handling
+process.on('unhandledRejection', (err) => {
+    console.log(`Logged Error: ${err}`);
+    process.exit(1);
+});
+
+process.on('uncaughtException', (err)  => {
+    console.log(`Logged Error: ${err}`);
+    process.exit(1);
+});
 
 // 3rd party Middleware
 app.use(helmet()); // Secure HTTP headers
@@ -29,11 +41,13 @@ app.use('/api/tasks', tasksRoutes);
 app.use('/api/login' ,loginRoutes);
 app.use('/api/user', userRoutes);
 
+// error handling middleware
+app.use(errorHandler);
 
 connect().catch(err => console.log(err));
 
 async function connect() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/todo-app' );
+  await mongoose.connect( `${process.env.MONGO_URI}/${process.env.MONGO_DB}`);
 }
 
   

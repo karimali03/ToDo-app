@@ -47,7 +47,7 @@ app.use(errorHandler);
 connect().catch(err => console.log(err));
 
 async function connect() {
-  await mongoose.connect( `${process.env.MONGO_URI}/${process.env.MONGO_DB}`);
+  await mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@cluster0.aldvb.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&appName=Cluster0`);
 }
 
   
